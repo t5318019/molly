@@ -53,9 +53,11 @@ if __name__ == "__main__":
             while True:
                 print(urlpath)
                 response = get_html(urlpath)
-                m = re.search('http-equiv=[\'"]*refresh[\'"]*\s+content=[\'"]\s*\d\s*;\s*url=([\w\/:.-]+)', response.text, flags=re.IGNORECASE)
+                m = re.search('http-equiv=[\'"]*refresh[\'"]*\s+content=[\'"]\s*\d\s*;\s*url=([\w\/:.\'"\-]+)', response.text, flags=re.IGNORECASE)
                 if m:
                     refresh_url = m[1].lower()
+                    refresh_url = refresh_url.replace('"', '')
+                    refresh_url = refresh_url.replace('\'', '')
                     refresh_url = refresh_url if refresh_url.startswith('http') else urljoin(response.url, refresh_url)
                     refresh_url = refresh_url.replace('https', 'http')
                     urlpath = refresh_url
