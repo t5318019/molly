@@ -50,6 +50,10 @@ if __name__ == "__main__":
         for row in rows:
             urlresult = urlparse(row['網址'].lower())
             urlpath = 'http://' + urlresult.netloc
+            html_filename =  os.path.join(PAGE_DIR, urlresult.netloc + '.html')
+
+            if os.path.exists(html_filename):
+                continue
 
             while True:
                 print(urlpath)
@@ -66,7 +70,7 @@ if __name__ == "__main__":
                     urlpath = refresh_url
                 else:
                     break
-            html_filename = urlresult.netloc + '.html'
-            with open(os.path.join(PAGE_DIR, html_filename), 'w') as f:
+
+            with open(html_filename, 'w') as f:
                 f.write(response.text)
             print(row['學校名稱'], urlresult.netloc, response.encoding, sep=': ')
