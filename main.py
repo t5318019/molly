@@ -1,11 +1,12 @@
 import requests
+import urllib3
 import csv
 import os.path
 import os
 import re
 from urllib.parse import urlparse
 from urllib.parse import urljoin
-requests.packages.urllib3.disable_warnings()
+urllib3.disable_warnings()
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 PAGE_DIR = os.path.join(os.path.dirname(__file__), 'page')
@@ -55,7 +56,7 @@ if __name__ == "__main__":
                 response = get_html(urlpath)
                 if response.status_code == 403:
                     response = get_html(urlpath.replace('http:', 'https:'))
-                m = re.search('http-equiv=[\'"]*refresh[\'"]*\s+content=[\'"]\s*\d\s*;\s*url=([\w\/:.\'"\-]+)', response.text, flags=re.IGNORECASE)
+                m = re.search(r'http-equiv=[\'"]*refresh[\'"]*\s+content=[\'"]\s*\d\s*;\s*url=([\w\/:.\'"\-]+)', response.text, flags=re.IGNORECASE)
                 if m:
                     refresh_url = m[1].lower()
                     refresh_url = refresh_url.replace('"', '')
