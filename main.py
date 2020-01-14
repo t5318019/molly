@@ -53,13 +53,15 @@ if __name__ == "__main__":
             while True:
                 print(urlpath)
                 response = get_html(urlpath)
+                if response.status_code == 403:
+                    response = get_html(urlpath.replace('http:', 'https:'))
                 m = re.search('http-equiv=[\'"]*refresh[\'"]*\s+content=[\'"]\s*\d\s*;\s*url=([\w\/:.\'"\-]+)', response.text, flags=re.IGNORECASE)
                 if m:
                     refresh_url = m[1].lower()
                     refresh_url = refresh_url.replace('"', '')
                     refresh_url = refresh_url.replace('\'', '')
                     refresh_url = refresh_url if refresh_url.startswith('http') else urljoin(response.url, refresh_url)
-                    refresh_url = refresh_url.replace('https', 'http')
+                    refresh_url = refresh_url.replace('https:', 'http:')
                     urlpath = refresh_url
                 else:
                     break
